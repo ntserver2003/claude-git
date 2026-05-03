@@ -6,30 +6,95 @@ on:
       - 'v*'
 
 jobs:
+  # ── verify tag matches csproj version ─────────────────────────────────────
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check version matches tag
+        run: |
+          CSPROJ_VERSION=$(grep -oP '(?<=<Version>)[^<]+' src/ClaudeGit.csproj)
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          if [[ "$CSPROJ_VERSION" != "$TAG_VERSION" ]]; then
+            echo "Tag v${TAG_VERSION} does not match <Version>${CSPROJ_VERSION}</Version> in csproj"
+            exit 1
+          fi
+
+  # ── build matrix ───────────────────────────────────────────────────────────
+  build:
+    needs: verify
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+            asset: claude-git-linux-x64
+            binary: claude-git
+
+          - os: macos-14          # Apple Silicon (M1/M2/M3) runner
+            rid: osx-arm64
+            asset: claude-git-osx-arm64
+            binary: claude-git
+
+          - os: windows-latest
+            rid: win-x64
+            asset: claude-git-win-x64.exe
+            binary: claude-git.exe
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # Native AOT on Linux requires clang and zlib
+      - name: Install AOT prerequisites (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y clang zlib1g-dev
+
+      - name: Publish
+        run: >
+          dotnet publish src/ClaudeGit.csproj
+          -c Release
+          -r ${{ matrix.rid }}
+          -o dist/${{ matrix.rid }}
+
+      - name: Rename artifact
+        shell: bash
+        run: |
+          mkdir -p release
+          cp dist/${{ matrix.rid }}/${{ matrix.binary }} release/${{ matrix.asset }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: release/${{ matrix.asset }}
+
+  # ── create GitHub release ──────────────────────────────────────────────────
   release:
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
 
-      - name: Get version from tag
-        id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
-
-      - name: Verify version matches script
+      - name: Make Unix binaries executable
         run: |
-          SCRIPT_VERSION=$(grep '^VERSION=' claude-git | head -1 | cut -d'"' -f2)
-          TAG_VERSION="${{ steps.version.outputs.VERSION }}"
-          if [[ "v${SCRIPT_VERSION}" != "${TAG_VERSION}" ]]; then
-            echo "Tag ${TAG_VERSION} doesn't match script version v${SCRIPT_VERSION}"
-            exit 1
-          fi
+          chmod +x artifacts/claude-git-linux-x64
+          chmod +x artifacts/claude-git-osx-arm64
 
-      - name: Create GitHub Release
+      - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           files: |
-            claude-git
-            install.sh
+            artifacts/claude-git-linux-x64
+            artifacts/claude-git-osx-arm64
+            artifacts/claude-git-win-x64.exe
