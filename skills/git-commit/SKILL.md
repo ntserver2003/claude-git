@@ -1,6 +1,6 @@
 ---
-name: claude-git-commit
-description: Propose a conventional commit message and commit staged/unstaged changes after confirmation. Use when the user wants to commit changes, asks Claude to commit, or types /claude-git-commit. Accepts optional -y/--yes flag to skip confirmation.
+name: git-commit
+description: Propose a conventional commit message and commit staged/unstaged changes after confirmation. Use when the user wants to commit changes, asks Claude to commit, or types /git-commit. Accepts optional -y/--yes flag to skip confirmation.
 ---
 
 # commit — AI commit with confirmation

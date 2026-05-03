@@ -1,6 +1,6 @@
 ---
-name: claude-git-msg
-description: Propose a conventional commit message for current staged/unstaged changes without committing. Use when the user wants a commit message suggestion, asks "what should I name this commit", or types /claude-git-msg.
+name: git-msg
+description: Propose a conventional commit message for current staged/unstaged changes without committing. Use when the user wants a commit message suggestion, asks "what should I name this commit", or types /git-msg.
 ---
 
 # msg — Propose a commit message

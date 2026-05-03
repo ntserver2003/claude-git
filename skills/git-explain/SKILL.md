@@ -1,6 +1,6 @@
 ---
-name: claude-git-explain
-description: Explain what the current staged/unstaged changes do in plain English. Use when the user asks "what does this change do", "explain my changes", or types /claude-git-explain.
+name: git-explain
+description: Explain what the current staged/unstaged changes do in plain English. Use when the user asks "what does this change do", "explain my changes", or types /git-explain.
 ---
 
 # explain — Explain current changes

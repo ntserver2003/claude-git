@@ -1,6 +1,6 @@
 ---
-name: claude-git-review
-description: Review current staged/unstaged changes for bugs, security issues, and logic errors. Use when the user wants a code review before committing, asks "is this safe to commit", or types /claude-git-review.
+name: git-review
+description: Review current staged/unstaged changes for bugs, security issues, and logic errors. Use when the user wants a code review before committing, asks "is this safe to commit", or types /git-review.
 ---
 
 # review — AI diff review
