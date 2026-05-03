@@ -1,6 +1,6 @@
 ---
-name: claude-git-prefix
-description: Propose a commit message prefixed with a ticket ID (e.g. CMB-1234) and commit after confirmation. Auto-detects Jira-style ticket from the branch name when no ID is given. Use when the user wants a prefixed commit, mentions a ticket number, or types /claude-git-prefix.
+name: git-prefix
+description: Propose a commit message prefixed with a ticket ID (e.g. CMB-1234) and commit after confirmation. Auto-detects Jira-style ticket from the branch name when no ID is given. Use when the user wants a prefixed commit, mentions a ticket number, or types /git-prefix.
 ---
 
 # prefix — Prefixed commit message

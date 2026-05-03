@@ -1,6 +1,6 @@
 ---
-name: claude-git-pr
-description: Generate a pull request description from commits ahead of a base branch. Use when the user wants to write a PR, asks for a PR description, or types /claude-git-pr. Accepts an optional base branch argument (default: main).
+name: git-pr
+description: Generate a pull request description from commits ahead of a base branch. Use when the user wants to write a PR, asks for a PR description, or types /git-pr. Accepts an optional base branch argument (default: main).
 ---
 
 # pr — Generate PR description
