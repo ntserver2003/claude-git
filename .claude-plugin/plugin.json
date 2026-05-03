@@ -1,5 +1,5 @@
 {
   "name": "claude-git",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "AI-powered git helpers — commit messages, code review, PR descriptions, and change explanations."
 }
