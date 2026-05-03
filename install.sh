@@ -31,7 +31,7 @@ fi
 mkdir -p "$INSTALL_DIR"
 
 # Download
-curl -fsSL "https://raw.githubusercontent.com/${REPO}/main/claude-git" -o "$INSTALL_DIR/$BINARY_NAME"
+curl -fsSL "https://raw.githubusercontent.com/${REPO}/main/bin/claude-git" -o "$INSTALL_DIR/$BINARY_NAME"
 chmod +x "$INSTALL_DIR/$BINARY_NAME"
 
 # Determine shell RC file
